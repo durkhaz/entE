@@ -1,9 +1,9 @@
 # entE
+v1.1 by durkhaz
 A source engine mapping tool 
 
 ================
-) entE v1.1 by durkhaz (
-================
+
 
 WHAT IT DOES:
 
