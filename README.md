@@ -1,5 +1,5 @@
 # entE
-v1.1 by durkhaz
+v1.1  
 A source engine mapping tool 
 
 ================
