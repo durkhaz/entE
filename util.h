@@ -12,6 +12,7 @@ std::vector<std::string> fetch_keyvalue(std::string& s);
 std::vector<std::string> fetch_output(std::string& s,const std::string& c);
 void split_output(std::vector<std::string>& list);
 std::string makestring(char* chars, unsigned int value, unsigned int& size);
+int get_first_nonctrl(std::string& line);
 
 class fcstream
 {

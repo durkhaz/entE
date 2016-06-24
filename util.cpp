@@ -272,3 +272,15 @@ string makestring(char* chars, unsigned int value, unsigned int& size) //generat
 	}
 	return result;
 }
+
+int get_first_nonctrl(string& line)
+{
+	for (unsigned int i = 0; i < line.size(); i++)
+	{
+		if (!iscntrl(line[i]))
+		{
+			return i;
+		}
+	}
+	return string::npos;
+}

@@ -27,6 +27,8 @@ int main(int argc, char* argv[])
 	logf.replace(logf.find_first_of("."), logf.length(), ".log");
 	fcstream *log = new fcstream(logf.c_str());
 
+	*log << "\n\n\n\n durkhaz - ente.exe (Jun 24 2016)\n\n";
+
 	//check if argument was passed in
 	if (argc == 1) 
 	{ 
@@ -58,8 +60,6 @@ int main(int argc, char* argv[])
 		*log << ERR_WF;
 		exit(1);
 	} 
-
-	cout << "\n\n\n";
 
 	vector<string> files = get_file_list("*.fgd");
 	if (!files.empty())
@@ -167,6 +167,8 @@ int main(int argc, char* argv[])
 			{
 				string ent = strInput.substr(15);
 				ent.pop_back();
+				push_list(ent, ent_number, ent_list);
+				/*
 				if (is_number(ent))
 				{
 					push_list(ent, blk_number, blk_list);
@@ -175,6 +177,8 @@ int main(int argc, char* argv[])
 				{
 					push_list(ent, ent_number, ent_list);
 				}
+				*/
+				
 			}
 
 
@@ -183,10 +187,13 @@ int main(int argc, char* argv[])
 			{
 				size_t smatch = strInput.find_last_of(" \"", match);
 				string wc_buffer = strInput.substr((smatch + 1), ((match - smatch)) - 1);
+				push_list(wc_buffer, wc_number, wc_list);
+				/*
 				if (!is_number(wc_buffer))
 				{
 					push_list(wc_buffer, wc_number, wc_list);
 				}
+				*/
 			}
 		}
 	}
@@ -294,6 +301,13 @@ int main(int argc, char* argv[])
 		}
 		if (line.size() > 1)
 		{
+			while ((line[get_first_nonctrl(line)] == '"') && (line[line.size() - 1] != '"'))
+			{
+				string line2;
+				getline(inf, line2);
+				line += "\n" + line2;
+
+			}
 			if (line[1] == '"') //keyvalue block
 			{
 				vector<string> muell = fetch_keyvalue(line);
@@ -316,11 +330,10 @@ int main(int argc, char* argv[])
 						}
 						else
 						{
-							*log << "\nUnknown key " + key + " for targetname " + value + " found! Skipping ambigious match!\n";
+							*log << "\nUnknown key \"" + key + "\" for targetname \"" + value + "\" found! Skipping ambigious match!\n";
 						}
 					}
 				}
-				outf << line << '\n';
 			}
 
 			else if (line[2] == '"') //output block
@@ -349,7 +362,7 @@ int main(int argc, char* argv[])
 								}
 								else
 								{
-									*log << "\nUnknown Input " + output[1] + " for targetname " + output[2] + " found! Skipping ambigious match!\n";
+									*log << "\nUnknown Input \"" + output[1] + "\" for targetname \"" + output[2] + "\" found! Skipping ambigious match!\n";
 								}
 							}
 						}
@@ -375,7 +388,7 @@ int main(int argc, char* argv[])
 										}
 										else
 										{
-											*log << "\nUnknown key " + addoutput[3] + " for targetname " + addoutput[4] + " found inside " + addoutput[2] + " statement! Skipping ambigious match!\n";
+											*log << "\nUnknown key \"" + addoutput[3] + "\" for targetname \"" + addoutput[4] + "\" found inside \"" + addoutput[2] + "\" statement! Skipping ambigious match!\n";
 										}
 									}
 								}
@@ -393,7 +406,7 @@ int main(int argc, char* argv[])
 										}
 										else
 										{
-											*log << "\nUnknown key " + addoutput[2] + " for targetname " + addoutput[3] + " found! Skipping ambigious match!\n";
+											*log << "\nUnknown key \"" + addoutput[2] + "\" for targetname \"" + addoutput[3] + "\" found! Skipping ambigious match!\n";
 										}
 									}
 								}
@@ -418,7 +431,7 @@ int main(int argc, char* argv[])
 									}
 									else
 									{
-										*log << "\nUnknown key " + addoutput[0] + " for targetname " + addoutput[1] + " found! Skipping ambigious match!\n";
+										*log << "\nUnknown key \"" + addoutput[0] + "\" for targetname \"" + addoutput[1] + "\" found! Skipping ambigious match!\n";
 									}
 								}
 							}
@@ -438,6 +451,7 @@ int main(int argc, char* argv[])
 
 								"OnUser1" "obj4_em,AddOutput,EntityTemplate obj4_templ,0,-1"
 
+
 							*/
 						}
 
@@ -452,11 +466,9 @@ int main(int argc, char* argv[])
 
 				vector<string>().swap(output);
 
-				outf << line << '\n';
 			}
-			else { outf << line << '\n'; }
 		}
-		else { outf << line << '\n'; }
+		outf << line << "\n";
 	}
 	*log << "DONE!\n\n";
 	inf.close(); //close input vmf
